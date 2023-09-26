@@ -80,7 +80,7 @@ void	handle_crypted(char	*message, char *from, FROMS from_type) { /* from_type: 
 	if (cs.string[ft_strlen(cs.string) - 1] == '\n') { cs.string[ft_strlen(cs.string) - 1] = '\0'; }
 
 	/* Handle Flags */
-	if (g_args.flag_q == 1) { print_crypted(cs, 1); return ; } /* Quiet mode */
+	if (g_args.flag_q == 1) { if (g_args.flag_p == 1 && from_type == FROM_STDIN) { ft_printf("%s\n", message); } print_crypted(cs, 1); return ; } /* Quiet mode */
 	if (g_args.flag_p == 1 && from_type == FROM_STDIN) { ft_printf("(\"%s\")= ", message); print_crypted(cs, 1); return ;} /* Echo stdin */
 	if (g_args.flag_r == 1) { print_crypted(cs, 0); ft_printf(" %s\n", from); return ;}
 	if (g_args.flag_s == 1 && from_type == FROM_STRING) {
