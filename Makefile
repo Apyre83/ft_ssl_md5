@@ -5,6 +5,7 @@ MY_SOURCES =	src/ft_ssl.c						\
 				src/ft_utils.c						\
 				src/md5.c							\
 				src/sha256.c						\
+				src/whirlpool.c						\
 				get_next_line/get_next_line.c		\
 				get_next_line/get_next_line_utils.c
 
@@ -16,7 +17,7 @@ GET_NEXT_LINE_DIR = get_next_line
 
 NAME = ft_ssl
 
-FLAGS = -Wall -Wextra -Werror -I $(INCLUDES) -I $(FT_PRINTF_DIR)/includes -I $(GET_NEXT_LINE_DIR)
+FLAGS = -g -Wall -Wextra -Werror -I $(INCLUDES) -I $(FT_PRINTF_DIR)/includes -I $(GET_NEXT_LINE_DIR)
 
 all: $(NAME)
 

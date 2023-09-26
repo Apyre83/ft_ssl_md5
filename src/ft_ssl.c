@@ -12,10 +12,10 @@ int	parse(int argc, char **argv) {
 	}
 
 	char	*command = argv[1];
-	if (ft_strcmp(command, "md5") != 0 && ft_strcmp(command, "sha256") != 0) { /* Get command */
+	if (ft_strcmp(command, "md5") != 0 && ft_strcmp(command, "sha256") != 0 && ft_strcmp(command, "whirlpool") != 0) { /* Get command */
 		ft_printf("ft_ssl: Error: '%s' is an invalid command.\n\n", command);
-		ft_printf("Commands:\nmd5\nsha256\n\n");
-		ft_printf("Flags:\n-p -q -r -s\n");
+		ft_printf("Commands:\nmd5\nsha256\nwhirlpool\n\n");
+		ft_printf("Flags:\n-p -q -r -s -i\n");
 		return (1);
 	}
 	g_args.command = command;
@@ -27,6 +27,7 @@ int	parse(int argc, char **argv) {
 		if (ft_strcmp(argv[i], "-p") == 0) g_args.flag_p = 1;
 		else if (ft_strcmp(argv[i], "-q") == 0) g_args.flag_q = 1;
 		else if (ft_strcmp(argv[i], "-r") == 0) g_args.flag_r = 1;
+		else if (ft_strcmp(argv[i], "-i") == 0) g_args.flag_i = 1;
 		else if (ft_strcmp(argv[i], "-s") == 0) {
 			g_args.flag_s = 1;
 			if (i + 1 < argc) {
@@ -60,14 +61,29 @@ int	parse(int argc, char **argv) {
 
 
 void	print_crypted(crypted_string cs, bool nl) {
-	for (size_t i = 0; i < cs.len; i++) {
+	for (int i = 0; i < cs.len; i++) {
 		ft_printf("%02x", cs.hash[i]);
 	}
 	if (nl == true) ft_printf("\n");
 }
 
+int	ft_toupper(int c)
+{
+	if (c <= 'z' && c >= 'a')
+		return (c - 32);
+	return (c);
+}
+char	*ft_str_to_upper(char *str) {
+	for (int i = 0; str[i]; i++) {
+		str[i] = ft_toupper(str[i]);
+	}
+	return (str);
+}
+
 
 void	handle_crypted(char	*message, char *from, FROMS from_type) { /* from_type: FROM_STDIN, FROM_STRING, FROM_FILE */
+	
+
 	crypted_string	cs = {0};
 	cs.string = message;
 
@@ -75,7 +91,8 @@ void	handle_crypted(char	*message, char *from, FROMS from_type) { /* from_type: 
 
 
 	if (ft_strcmp(g_args.command, "md5") == 0) { cs.len = 16; md5((const uint8_t *)message, ft_strlen(message), cs.hash); crypt_method = "MD5"; }
-	else { cs.len = 32; sha256((const uint8_t *)message, ft_strlen(message), cs.hash); crypt_method = "SHA256";}
+	else if (ft_strcmp(g_args.command, "sha256") == 0) { cs.len = 32; sha256((const uint8_t *)message, ft_strlen(message), cs.hash); crypt_method = "SHA256";}
+	else { whirlpool((uint8_t *)message, cs.hash); cs.len = 64; crypt_method = "Whirlpool"; }
 
 	if (cs.string[ft_strlen(cs.string) - 1] == '\n') { cs.string[ft_strlen(cs.string) - 1] = '\0'; }
 
@@ -83,12 +100,7 @@ void	handle_crypted(char	*message, char *from, FROMS from_type) { /* from_type: 
 	if (g_args.flag_q == 1) { if (g_args.flag_p == 1 && from_type == FROM_STDIN) { ft_printf("%s\n", message); } print_crypted(cs, 1); return ; } /* Quiet mode */
 	if (g_args.flag_p == 1 && from_type == FROM_STDIN) { ft_printf("(\"%s\")= ", message); print_crypted(cs, 1); return ;} /* Echo stdin */
 	if (g_args.flag_r == 1) { print_crypted(cs, 0); ft_printf(" %s\n", from); return ;}
-	if (g_args.flag_s == 1 && from_type == FROM_STRING) {
-		if (ft_strcmp(g_args.command, "md5") == 0) { ft_printf("MD5 (\"%s\") = ", from); }
-		else { ft_printf("SHA256 (\"%s\") = ", from); }
-		print_crypted(cs, 1);
-		return ;
-	}
+	if (g_args.flag_s == 1 && from_type == FROM_STRING) { ft_printf("%s (\"%s\") = ", crypt_method, from); print_crypted(cs, 1); return ; }
 	if (from_type == FROM_STDIN) { ft_printf("(stdin)= ");}
 	else if (from_type == FROM_STRING) { ft_printf("%s (\"%s\") = ", crypt_method, from); }
 	else { ft_printf("%s (%s) = ", crypt_method, from); }
@@ -101,34 +113,8 @@ int	main( int argc, char **argv) {
 	if (parse(argc, argv) == 1)
 		return (1);
 
-	/* Print everything */
-	/*ft_printf("command: %s\n", argv[1]);
-	ft_printf("flag_p: %d\n", g_args.flag_p);
-	ft_printf("flag_q: %d\n", g_args.flag_q);
-	ft_printf("flag_r: %d\n", g_args.flag_r);
-	ft_printf("flag_s: %d\n", g_args.flag_s);
-	ft_printf("nb_strings: %d\n", g_args.nb_strings);
-	ft_printf("nb_files: %d\n", g_args.nb_files);
-
-	if (g_args.nb_strings > 0) {
-		ft_printf("strings:\n");
-		for (int i = 0; i < g_args.nb_strings; i++)
-			ft_printf("\t%s\n", g_args.strings[i]);
-	}
-
-	if (g_args.nb_files > 0) {
-		ft_printf("\nfiles:\n");
-		for (int i = 0; i < g_args.nb_files; i++)
-			ft_printf("\t%s\n", g_args.files[i]);
-	}*/
-
-
-
-	/* Do the stuff */
-	/*
-	 * First if the -p flag is set, read from stdin and print it OR if there are no files / strings to read from
-	 */
-	if (g_args.flag_p == 1 || (g_args.nb_files == 0 && g_args.nb_strings == 0)) {
+	/* First if the -p flag is set, read from stdin and print it OR if there are no files / strings to read from */
+	if (g_args.flag_p == 1 || (g_args.nb_files == 0 && g_args.nb_strings == 0 && g_args.flag_i == 0)) {
 		char	*line = NULL;
 		char	*result = NULL;
 		char	*tmp = NULL;
@@ -138,9 +124,9 @@ int	main( int argc, char **argv) {
 			else { tmp = ft_strjoin(result, line); free(result); result = tmp; free(line); }
 		}
 
-		free(line);
-
+		if (line) free(line);
 		handle_crypted(result, "stdin", FROM_STDIN);
+		if (result) free(result);
 	}
 
 	/* Now do all the s strings */
@@ -166,9 +152,36 @@ int	main( int argc, char **argv) {
 			else { tmp = ft_strjoin(result, line); free(result); result = tmp; free(line); }
 		}
 
-		free(line);
-
+		if (line) free(line);
 		handle_crypted(result, file, FROM_FILE);
+		if (result) free(result);
+	}
+
+	if (g_args.flag_i) { /* Interactive mode, inputs are: <command> <message> */
+		char	*line = NULL;
+
+		while ((line = get_next_line(0)) != NULL) {
+
+			int	i = 0;
+			while (line[i] && line[i] != ' ') i++;
+			if (line[i] == '\0') { ft_printf("ft_ssl: Error: no message.\n"); free(line); return (1); }
+			line[i] = '\0';
+
+			if (ft_strcmp(line, "md5") != 0 && ft_strcmp(line, "sha256") != 0 && ft_strcmp(line, "whirlpool") != 0) { /* Get command */
+				ft_printf("ft_ssl: Error: '%s' is an invalid command.\n\n", line);
+				ft_printf("Commands:\nmd5\nsha256\nwhirlpool\n\n");
+				free(line);
+				return (1);
+			}
+
+			g_args.command = line;
+
+			char	*message = line + i + 1;
+			handle_crypted(message, message, FROM_STRING);
+
+			free(line);
+		}
+
 	}
 
 	
