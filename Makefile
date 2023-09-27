@@ -3,9 +3,10 @@ CLEAR = "\033[K"
 
 MY_SOURCES =	src/ft_ssl.c						\
 				src/ft_utils.c						\
-				src/md5.c							\
-				src/sha256.c						\
-				src/whirlpool.c						\
+				src/ft_parsing.c					\
+				src/ft_md5.c						\
+				src/ft_sha256.c						\
+				src/ft_whirlpool.c					\
 				get_next_line/get_next_line.c		\
 				get_next_line/get_next_line_utils.c
 

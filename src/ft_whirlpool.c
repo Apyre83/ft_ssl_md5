@@ -71,7 +71,6 @@ void preprocess(uint8_t *message, size_t length, Block **blocks, size_t *num_blo
 
 uint8_t	*convert_state_to_array(uint8_t state[8][8], uint8_t *array) {
     if (array == NULL) {
-        // Gérer l'erreur d'allocation
         exit(1);
     }
 

@@ -15,16 +15,6 @@
 #include <stdio.h> /* File */
 
 
-void	md5(const uint8_t *message, uint32_t len, uint8_t *digest);
-void	sha256(const uint8_t *data, uint32_t len, uint8_t *hash);
-void	whirlpool(uint8_t *message, uint8_t *array, uint32_t linelen);
-
-
-int		ft_strcmp(const char *s1, const char *s2);
-void	*ft_memcpy(void *dst, const void *src, size_t n);
-
-
-
 typedef enum {
 	FROM_STDIN,
 	FROM_STRING,
@@ -55,6 +45,26 @@ typedef struct s_args {
 	int			nb_files;
 	int			nb_strings;
 }	args;
+
+
+
+void	md5(const uint8_t *message, uint32_t len, uint8_t *digest);
+void	sha256(const uint8_t *data, uint32_t len, uint8_t *hash);
+void	whirlpool(uint8_t *message, uint8_t *array, uint32_t linelen);
+
+
+int		ft_strcmp(const char *s1, const char *s2);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
+void	print_crypted(crypted_string cs, bool nl);
+
+
+char	*read_from_stdin(uint32_t *len);
+char	*read_from_file(FILE *f, uint32_t *filelen);
+int		parse(int argc, char **argv);
+
+
+
+
 
 
 extern args	g_args;

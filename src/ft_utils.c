@@ -27,3 +27,11 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	}
 	return (dest);
 }
+
+
+void	print_crypted(crypted_string cs, bool nl) {
+	for (int i = 0; i < cs.len; i++) {
+		ft_printf("%02x", cs.hash[i]);
+	}
+	if (nl == true) ft_printf("\n");
+}
