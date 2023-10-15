@@ -1,12 +1,29 @@
 UP = "\033[A"
 CLEAR = "\033[K"
 
+MD = Message_Digest_Command
+P = Parsing
+B = Base64
+DES = DES
+
 MY_SOURCES =	src/ft_ssl.c						\
 				src/ft_utils.c						\
-				src/ft_parsing.c					\
-				src/ft_md5.c						\
-				src/ft_sha256.c						\
-				src/ft_whirlpool.c					\
+													\
+				src/$(P)/ft_parsing.c				\
+				src/$(P)/ft_parsing_mdc.c			\
+				src/$(P)/ft_parsing_base64.c		\
+				src/$(P)/ft_parsing_des.c			\
+													\
+				src/$(MD)/ft_md5.c					\
+				src/$(MD)/ft_sha256.c				\
+				src/$(MD)/ft_whirlpool.c			\
+				src/$(MD)/ft_handler.c				\
+													\
+				src/$(B)/ft_base64.c				\
+				src/$(B)/ft_handler.c				\
+													\
+				src/$(DES)/ft_handler.c				\
+													\
 				get_next_line/get_next_line.c		\
 				get_next_line/get_next_line_utils.c
 

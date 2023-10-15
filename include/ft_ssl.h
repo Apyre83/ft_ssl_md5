@@ -1,12 +1,12 @@
 
-
 #ifndef FT_SSL_H
-# define FT_SSL_H
-
+#define FT_SSL_H
 
 
 #include "ft_printf.h"
 #include "get_next_line.h"
+#include "ft_parsing.h"
+#include "ft_handler.h"
 
 #include <stddef.h> /* size_t */
 #include <stdbool.h> /* bool */
@@ -21,6 +21,12 @@ typedef enum {
 	FROM_FILE
 } FROMS;
 
+typedef struct {
+    const char *command;
+    int (*parse)(int argc, char **argv);
+    int (*handler)(void);
+}   command_flags;
+
 
 typedef struct s_crypted_string {
 	char		*string;
@@ -30,20 +36,34 @@ typedef struct s_crypted_string {
 
 
 typedef struct s_args {
-	char		*command;
+	char	*command;
 	
-	char		*files[1024];
+    char	*strings[1024];
+    int		nb_files;
+    int		nb_strings;
 
-	bool		flag_p;
-	bool		flag_q;
-	bool		flag_r;
-	bool		flag_s;
-	char		*strings[1024];
+    /* MD5 */
+	bool	flag_q;
+	bool	flag_r;
+    /* END MD5 */
 
-	bool		flag_i; /* Bonus */
+    /* DES */
+    bool   flag_a;
+    bool   flag_d;
+    bool   flag_e;
+    bool   flag_i;
+    bool   flag_k;
+    bool   flag_o;
+    bool   flag_v;
+    char    *file_o;
+    /* END DES */
 
-	int			nb_files;
-	int			nb_strings;
+    /* MD5 AND DES */
+    bool	flag_p; /* read from stdin for md5, password in ascii for des */
+    bool	flag_s; /* string for md5, salt for des */
+    char	*files[1024]; /* represent the input files */
+    /* END MD5 AND DES */
+
 }	args;
 
 
@@ -65,9 +85,11 @@ int		parse(int argc, char **argv);
 
 
 
+#define NB_COMMANDS 12
 
+extern command_flags	g_commands[NB_COMMANDS];
 
-extern args	g_args;
+extern args             g_args;
 
 
 
