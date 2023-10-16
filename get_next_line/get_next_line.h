@@ -22,7 +22,7 @@
 
 // Utils
 
-int		ft_strlen(char *str);
+int		ft_strlen(const char *str);
 
 void	*ft_memset(void *s, int c, size_t n);
 

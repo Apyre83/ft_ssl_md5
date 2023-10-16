@@ -35,7 +35,7 @@ typedef struct s_options
 }	t_options;
 
 int			ft_isdigit(int c);
-int			ft_strlen(char *str);
+int			ft_strlen(const char *str);
 int			ft_atoi(const char *s);
 char		*ft_itoa(int n);
 char		*ft_strdup(char const *str);

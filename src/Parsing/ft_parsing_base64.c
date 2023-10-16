@@ -16,7 +16,7 @@ int parse_base64(int argc, char **argv) {
     g_args.flag_e = 1;
 
     while (++i < argc) {
-        if (argv[i][0] != '-') break;
+        if (argv[i][0] != '-') { ft_printf("ft_ssl: Error: '%s', you must provide the -i flag before the input file.\n", argv[i]); return (1); }
 
         if (ft_strcmp(argv[i], "-d") == 0) { g_args.flag_d = 1; g_args.flag_e = 0; }
         else if (ft_strcmp(argv[i], "-e") == 0) { g_args.flag_e = 1; g_args.flag_d = 0; }

@@ -13,6 +13,7 @@
 #include <stdint.h> /* uint32_t */
 #include <fcntl.h> /* open */
 #include <stdio.h> /* File */
+#include <stdlib.h> /* malloc, free */
 
 
 typedef enum {
@@ -76,7 +77,9 @@ void	whirlpool(uint8_t *message, uint8_t *array, uint32_t linelen);
 int		ft_strcmp(const char *s1, const char *s2);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 void	print_crypted(crypted_string cs, bool nl);
-
+char	*ft_strchr(const char *s, int c);
+int     ft_isalnum(int c);
+int     ft_strlen_u(uint8_t *s);
 
 char	*read_from_stdin(uint32_t *len);
 char	*read_from_file(FILE *f, uint32_t *filelen);
