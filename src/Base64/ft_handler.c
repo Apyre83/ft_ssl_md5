@@ -7,7 +7,7 @@ int handle_crypted_base64(char *message, uint32_t len, uint8_t *(*crypt_fun)(con
 
     if (file) { write(fd, file, ft_strlen(file)); write(fd, ": ", 2); }
     write(fd, result, ft_strlen_u(result));
-    write(fd, "\n", 1);
+    write(fd, "\n\n", 2);
 
     if (result) free(result);
     return (0);
