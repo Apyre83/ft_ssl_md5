@@ -72,6 +72,7 @@ typedef struct s_args {
 void	md5(const uint8_t *message, uint32_t len, uint8_t *digest);
 void	sha256(const uint8_t *data, uint32_t len, uint8_t *hash);
 void	whirlpool(uint8_t *message, uint8_t *array, uint32_t linelen);
+uint64_t	des(uint64_t input, uint64_t key, char mode);
 
 
 int		ft_strcmp(const char *s1, const char *s2);

@@ -23,6 +23,7 @@ MY_SOURCES =	src/ft_ssl.c						\
 				src/$(B)/ft_handler.c				\
 													\
 				src/$(DES)/ft_handler.c				\
+				src/$(DES)/ft_des.c					\
 													\
 				get_next_line/get_next_line.c		\
 				get_next_line/get_next_line_utils.c
