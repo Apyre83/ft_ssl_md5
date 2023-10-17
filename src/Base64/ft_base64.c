@@ -3,9 +3,9 @@
 
 static const char base64_table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-int is_base64(unsigned char c) {
-    return (ft_isalnum(c) || (c == '+') || (c == '/'));
-}
+int is_base64(unsigned char c) { return (ft_isalnum(c) || (c == '+') || (c == '/')); }
+int ft_isspace(int c) { return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r'); }
+
 
 uint8_t *base64_decode(const char *encoded_string, uint32_t *output_length) {
     int in_len = ft_strlen(encoded_string);
@@ -22,7 +22,7 @@ uint8_t *base64_decode(const char *encoded_string, uint32_t *output_length) {
     }
 
     while (in_len-- && (encoded_string[in_] != '=')) {
-        if (!is_base64(encoded_string[in_])) { in_++; continue; }
+        if (!is_base64(encoded_string[in_])) { if (!ft_isspace(encoded_string[in_])) { ft_printf("Error, invalid character at position %d.\n", in_); free(ret); return(NULL); } in_++; continue; }
         char_array_4[i++] = encoded_string[in_]; in_++;
         if (i == 4) {
             for (i = 0; i < 4; i++)
@@ -59,14 +59,14 @@ uint8_t *base64_decode(const char *encoded_string, uint32_t *output_length) {
 
 
 
-
-
 uint8_t *base64_encode(const char *input, uint32_t *len) {
+#ifdef DEBUG
+	ft_printf("decode base64, input: {%s}\n", input);
+#endif
     if (input == NULL || len == NULL) {
         return NULL;
     }
-
-    uint32_t olen = 4 * ((*len + 2) / 3);
+    uint32_t	olen = 4 * ((*len + 2) / 3);
 
     if (olen < *len) {
         return NULL;
@@ -87,6 +87,7 @@ uint8_t *base64_encode(const char *input, uint32_t *len) {
         *pos++ = base64_table[((in[1] & 0x0f) << 2) | (in[2] >> 6)];
         *pos++ = base64_table[in[2] & 0x3f];
         in += 3;
+		
     }
 
     if (end - in) {

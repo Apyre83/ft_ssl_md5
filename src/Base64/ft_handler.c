@@ -5,9 +5,9 @@ int handle_crypted_base64(char *message, uint32_t len, uint8_t *(*crypt_fun)(con
     uint8_t *result = crypt_fun(message, &len);
     if (!result) return (1);
 
-    if (file) { write(fd, file, ft_strlen(file)); write(fd, ": ", 2); }
+    if (file) { write(fd, file, ft_strlen(file)); write(fd, ":\n", 2); }
     write(fd, result, ft_strlen_u(result));
-    write(fd, "\n\n", 2);
+    write(fd, "\n", 1);
 
     if (result) free(result);
     return (0);
@@ -27,7 +27,7 @@ int handler_base64(void) {
     if (g_args.flag_o) ft_printf("\tFile: %s\n", g_args.file_o);
 #endif
 
-    int fd = 0;
+    int fd = 1;
     if (g_args.flag_o) {
         fd = open(g_args.file_o, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (fd == -1) { ft_printf("ft_ssl: Error: could not open file '%s'.\n", g_args.file_o); return (1); }
