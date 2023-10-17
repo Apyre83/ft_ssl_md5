@@ -57,6 +57,12 @@ typedef struct s_args {
     bool   flag_o;
     bool   flag_v;
     char    *file_o;
+
+	uint64_t	key;
+	char		*password;
+	char		*salt;
+	uint64_t	iv;
+
     /* END DES */
 
     /* MD5 AND DES */
